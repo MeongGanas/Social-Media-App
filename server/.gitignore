@@ -1,0 +1,13 @@
+# Mengabaikan file .env
+.env
+
+# Direktori node_modules
+node_modules/
+
+# Berkas log
+logs/
+*.log
+
+# Berkas yang dihasilkan oleh sistem operasi
+.DS_Store
+Thumbs.db

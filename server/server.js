@@ -14,7 +14,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/posts/", PostController);
+app.use("/api/posts/:userId", PostController);
 app.use("/users", UserController);
 
 mongoose

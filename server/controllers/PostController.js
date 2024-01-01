@@ -2,17 +2,17 @@ const mongoose = require("mongoose");
 const express = require("express");
 const Posts = require("../model/PostModel");
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 // all posts
-router.get("/:userId", async (req, res) => {
+router.get("/", async (req, res) => {
   const posts = await Posts.find({}).sort({ createdAt: -1 });
 
   res.status(200).json(posts);
 });
 
 // single posts
-router.get("/:userId/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.isValidObjectId(id)) {
@@ -25,7 +25,7 @@ router.get("/:userId/:id", async (req, res) => {
 });
 
 // create posts
-router.post("/:userId", async (req, res) => {
+router.post("/", async (req, res) => {
   const { content, image } = req.body;
   const { userId } = req.params;
 
@@ -38,7 +38,7 @@ router.post("/:userId", async (req, res) => {
 });
 
 // delete posts
-router.delete("/:userId/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const { id, userId } = req.params;
 
   if (!mongoose.isValidObjectId(id) || !mongoose.isValidObjectId(userId)) {
@@ -55,7 +55,7 @@ router.delete("/:userId/:id", async (req, res) => {
 });
 
 // update posts
-router.patch("/:userId/:id", async (req, res) => {
+router.patch("/:id", async (req, res) => {
   const { id, userId } = req.params;
 
   if (!mongoose.isValidObjectId(id) || !mongoose.isValidObjectId(userId)) {

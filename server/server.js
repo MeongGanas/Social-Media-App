@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const PostController = require("./controllers/PostController");
 
 const app = express();
 const port = process.env.PORT;
@@ -11,6 +12,8 @@ app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
 });
+
+app.use("/api/posts", PostController);
 
 mongoose
   .connect(process.env.MONGO_URL)

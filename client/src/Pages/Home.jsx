@@ -1,7 +1,12 @@
+import Layout from "../Layout/layout";
+import PostCard from "../components/PostCard";
+
 export default function Home() {
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+    <Layout>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <PostCard />
+      </div>
+    </Layout>
   );
 }

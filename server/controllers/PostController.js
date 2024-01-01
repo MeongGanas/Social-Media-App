@@ -5,14 +5,14 @@ const Posts = require("../model/PostModel");
 const router = express.Router();
 
 // all posts
-router.get("/", async (req, res) => {
+router.get("/:userId", async (req, res) => {
   const posts = await Posts.find({}).sort({ createdAt: -1 });
 
   res.status(200).json(posts);
 });
 
 // single posts
-router.get("/:id", async (req, res) => {
+router.get("/:userId/:id", async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.isValidObjectId(id)) {
@@ -25,11 +25,12 @@ router.get("/:id", async (req, res) => {
 });
 
 // create posts
-router.post("/", async (req, res) => {
-  const { desc, image } = req.body;
+router.post("/:userId", async (req, res) => {
+  const { content, image } = req.body;
+  const { userId } = req.params;
 
   try {
-    const post = await Posts.create({ desc, image });
+    const post = await Posts.create({ author: userId, content, image });
     res.status(200).json(post);
   } catch (err) {
     res.status(404).json({ error: err.message });
@@ -37,26 +38,34 @@ router.post("/", async (req, res) => {
 });
 
 // delete posts
-router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
+router.delete("/:userId/:id", async (req, res) => {
+  const { id, userId } = req.params;
 
-  if (!mongoose.isValidObjectId(id)) {
+  if (!mongoose.isValidObjectId(id) || !mongoose.isValidObjectId(userId)) {
     return res.status(404).json({ mssg: "Invalid ID" });
   }
 
-  const post = await Posts.findByIdAndDelete({ _id: id });
+  const post = await Posts.findOneAndDelete({ _id: id, author: userId });
+
+  if (!post) {
+    return res.status(404).json({ mssg: "No such post" });
+  }
+
   res.status(200).json(post);
 });
 
 // update posts
-router.patch("/:id", async (req, res) => {
-  const { id } = req.params;
+router.patch("/:userId/:id", async (req, res) => {
+  const { id, userId } = req.params;
 
-  if (!mongoose.isValidObjectId(id)) {
+  if (!mongoose.isValidObjectId(id) || !mongoose.isValidObjectId(userId)) {
     return res.status(404).json({ mssg: "Invalid ID" });
   }
 
-  const post = await Posts.findByIdAndUpdate({ _id: id }, { ...req.body });
+  const post = await Posts.findOneAndUpdate(
+    { _id: id, author: userId },
+    { ...req.body }
+  );
 
   if (!post) {
     return res.status(404).json({ mssg: "No such post" });

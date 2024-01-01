@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const PostModel = new Schema(
   {
-    desc: {
+    content: {
       type: String,
       required: true,
     },
@@ -12,6 +12,7 @@ const PostModel = new Schema(
       type: String,
       required: true,
     },
+    author: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

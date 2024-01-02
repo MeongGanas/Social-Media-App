@@ -1,20 +1,43 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Login({
-  login,
-  setUsername,
-  setPassword,
-  error,
-  token,
-}) {
+export default function Login({ token, setToken }) {
   const navigate = useNavigate();
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [err, setErr] = useState(null);
 
   useEffect(() => {
     if (token) {
       navigate("/");
     }
   });
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    if (!token) {
+      const logindata = { username, password };
+
+      const response = await fetch("/users/login", {
+        method: "POST",
+        body: JSON.stringify(logindata),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const json = await response.json();
+
+      if (!response.ok) {
+        setErr(json.error);
+      } else {
+        setToken(json.token);
+        localStorage.setItem("token", json.token);
+        navigate("/");
+      }
+    }
+  };
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -26,7 +49,7 @@ export default function Login({
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6">
-          {error && <h1 className="text-red-700 text-xl">{error}</h1>}
+          {err && <h1 className="text-red-700 text-xl">{err}</h1>}
           <div>
             <label
               htmlFor="username"
@@ -83,7 +106,7 @@ export default function Login({
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={login}
+              onClick={handleLogin}
             >
               Sign in
             </button>

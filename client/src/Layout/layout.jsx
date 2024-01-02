@@ -82,7 +82,10 @@ export default function Layout({ children }) {
               </NavLink>
             </li>
             <li>
-              <NavLink className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-200">
+              <NavLink
+                to="/logout"
+                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-200"
+              >
                 <LogoutIcon />
                 <span className="flex-1 ms-3 whitespace-nowrap">Logout</span>
               </NavLink>

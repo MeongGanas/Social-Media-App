@@ -12,13 +12,11 @@ export default function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
   const navigate = useNavigate();
+
   const logout = () => {
     setToken(null);
     localStorage.removeItem("token");
-
-    if (!token) {
-      navigate("/login");
-    }
+    navigate("/login");
   };
 
   return (

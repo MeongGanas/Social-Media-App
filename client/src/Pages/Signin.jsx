@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import swal from "sweetalert2";
 
 export default function Login({ token, setToken }) {
   const navigate = useNavigate();
@@ -31,11 +32,23 @@ export default function Login({ token, setToken }) {
 
       if (!response.ok) {
         setErr(json.error);
-      } else {
-        setToken(json.token);
-        localStorage.setItem("token", json.token);
-        navigate("/");
+        return false;
       }
+
+      setToken(json.token);
+      localStorage.setItem("token", json.token);
+
+      swal
+        .fire({
+          title: "Success!",
+          text: "Login Success!",
+          icon: "success",
+          confirmButtonText: "Close",
+          timer: 1000,
+        })
+        .then(() => {
+          navigate("/");
+        });
     }
   };
 

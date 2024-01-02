@@ -4,17 +4,23 @@ import {
   Explore as ExploreIcon,
   Person as PersonIcon,
   Logout as LogoutIcon,
+  Close as CloseIcon,
 } from "@mui/icons-material";
+import { useState } from "react";
 
 export default function Layout({ children }) {
+  const [active, setActive] = useState(false);
+
+  const handleToggle = () => {
+    setActive(!active);
+  };
+
   return (
     <div>
       <button
-        data-drawer-target="default-sidebar"
-        data-drawer-toggle="default-sidebar"
-        aria-controls="default-sidebar"
         type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 "
+        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        onClick={handleToggle}
       >
         <span className="sr-only">Open sidebar</span>
         <svg
@@ -33,12 +39,20 @@ export default function Layout({ children }) {
       </button>
 
       <aside
-        id="default-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
-        aria-label="Sidebar"
+        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full ${
+          active ? "translate-x-0" : ""
+        } sm:translate-x-0`}
       >
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50">
           <ul className="space-y-2 font-medium">
+            <li className="sm:hidden">
+              <button
+                className="hover:bg-gray-200 p-2 rounded-lg"
+                onClick={handleToggle}
+              >
+                <CloseIcon />
+              </button>
+            </li>
             <li>
               <NavLink
                 to={"/"}

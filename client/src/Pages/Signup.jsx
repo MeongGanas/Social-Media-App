@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import swal from "sweetalert2";
 
 export default function Signup() {
   const [username, setUsername] = useState("");
@@ -26,9 +27,22 @@ export default function Signup() {
     });
     const json = await response.json();
 
-    if (response.ok) {
-      navigate("/");
+    if (!response.ok) {
+      setErr(json.error);
+      return false;
     }
+
+    swal
+      .fire({
+        title: "Success!",
+        text: "Account has been create succesfuly!",
+        icon: "success",
+        confirmButtonText: "Close",
+        timer: 1000,
+      })
+      .then(() => {
+        navigate("/");
+      });
   };
 
   return (

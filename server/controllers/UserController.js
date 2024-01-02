@@ -16,8 +16,12 @@ router.post("/create", async (req, res) => {
       .json({ mssg: "Username telah digunakan, pilih username lain" });
   }
 
-  const user = await Users.create({ username, password });
-  res.status(200).json(user);
+  try {
+    const user = await Users.create({ username, password });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.toString() });
+  }
 });
 
 router.post("/login", async (req, res) => {

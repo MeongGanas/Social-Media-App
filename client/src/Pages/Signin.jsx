@@ -1,6 +1,21 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Login({
+  login,
+  setUsername,
+  setPassword,
+  error,
+  token,
+}) {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  });
+
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -11,9 +26,10 @@ export default function Login() {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6">
+          {error && <h1 className="text-red-700 text-xl">{error}</h1>}
           <div>
             <label
-              for="username"
+              htmlFor="username"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               Username
@@ -23,8 +39,9 @@ export default function Login() {
                 id="username"
                 name="username"
                 type="text"
-                autocomplete="username"
+                autoComplete="username"
                 required
+                onChange={(e) => setUsername(e.target.value)}
                 className="block w-full px-3 rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -33,7 +50,7 @@ export default function Login() {
           <div>
             <div className="flex items-center justify-between">
               <label
-                for="password"
+                htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Password
@@ -52,8 +69,11 @@ export default function Login() {
                 id="password"
                 name="password"
                 type="password"
-                autocomplete="current-password"
+                autoComplete="current-password"
                 required
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
                 className="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -63,6 +83,7 @@ export default function Login() {
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={login}
             >
               Sign in
             </button>

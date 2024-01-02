@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   Home as HomeIcon,
   Explore as ExploreIcon,
@@ -14,7 +14,7 @@ export default function Layout({ children }) {
         data-drawer-toggle="default-sidebar"
         aria-controls="default-sidebar"
         type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
+        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200 "
       >
         <span className="sr-only">Open sidebar</span>
         <svg
@@ -25,8 +25,8 @@ export default function Layout({ children }) {
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            clip-rule="evenodd"
-            fill-rule="evenodd"
+            clipRule="evenodd"
+            fillRule="evenodd"
             d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
           ></path>
         </svg>
@@ -40,37 +40,52 @@ export default function Layout({ children }) {
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50">
           <ul className="space-y-2 font-medium">
             <li>
-              <Link
+              <NavLink
                 to={"/"}
-                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                className={({ isActive }) => {
+                  const baseClasses =
+                    "flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-200";
+
+                  return isActive ? `${baseClasses} bg-gray-200` : baseClasses;
+                }}
               >
                 <HomeIcon />
                 <span className="ms-3">Home</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to={"/explore"}
-                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                className={({ isActive }) => {
+                  const baseClasses =
+                    "flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-200";
+
+                  return isActive ? `${baseClasses} bg-gray-200` : baseClasses;
+                }}
               >
                 <ExploreIcon />
                 <span className="flex-1 ms-3 whitespace-nowrap">Explore</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link
+              <NavLink
                 to={"/profile"}
-                className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                className={({ isActive }) => {
+                  const baseClasses =
+                    "flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-200";
+
+                  return isActive ? `${baseClasses} bg-gray-200` : baseClasses;
+                }}
               >
                 <PersonIcon />
                 <span className="flex-1 ms-3 whitespace-nowrap">Profile</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100">
+              <NavLink className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-200">
                 <LogoutIcon />
                 <span className="flex-1 ms-3 whitespace-nowrap">Logout</span>
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </div>

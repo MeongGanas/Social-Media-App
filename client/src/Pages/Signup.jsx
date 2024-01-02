@@ -13,7 +13,7 @@ export default function Signup() {
         <form className="space-y-6">
           <div>
             <label
-              for="username"
+              htmlFor="username"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               Username
@@ -23,7 +23,7 @@ export default function Signup() {
                 id="username"
                 name="username"
                 type="text"
-                autocomplete="username"
+                autoComplete="username"
                 required
                 className="block w-full px-3 rounded-md border-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -33,7 +33,7 @@ export default function Signup() {
           <div>
             <div className="flex items-center justify-between">
               <label
-                for="password"
+                htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Password
@@ -44,7 +44,7 @@ export default function Signup() {
                 id="password"
                 name="password"
                 type="password"
-                autocomplete="current-password"
+                autoComplete="current-password"
                 required
                 className="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -54,7 +54,7 @@ export default function Signup() {
           <div>
             <div className="flex items-center justify-between">
               <label
-                for="confirm-pass"
+                htmlFor="confirm-pass"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Confirmation password
@@ -65,7 +65,7 @@ export default function Signup() {
                 id="confirm-pass"
                 name="confirm-pass"
                 type="password"
-                autocomplete="disable"
+                autoComplete="disable"
                 required
                 className="block w-full rounded-md border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />

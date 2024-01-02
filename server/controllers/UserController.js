@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const express = require("express");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const Users = require("../model/UserModel");
 
 const router = express.Router();
@@ -15,14 +16,8 @@ router.post("/create", async (req, res) => {
       .json({ mssg: "Username telah digunakan, pilih username lain" });
   }
 
-  bcrypt.hash(password, 8, async (err, hash) => {
-    if (err) {
-      return res.status(404).json({ mssg: "Terjadi kesalahan saat hash" });
-    }
-    const newPass = hash;
-    const user = await Users.create({ username, password: newPass });
-    res.status(200).json(user);
-  });
+  const user = await Users.create({ username, password });
+  res.status(200).json(user);
 });
 
 router.post("/login", async (req, res) => {
@@ -31,22 +26,18 @@ router.post("/login", async (req, res) => {
   const existingUser = await Users.findOne({ username });
 
   if (!existingUser) {
-    return res.status(404).json({ mssg: "User not found" });
+    res.status(404).json({ error: "User not found" });
+    return;
   }
 
-  bcrypt.compare(password, existingUser.password, (err, result) => {
-    if (err) {
-      return res
-        .status(404)
-        .json({ mssg: "Terjadi kesalahan saat membandingkan password." });
-    }
+  const isPassValid = await bcrypt.compare(password, existingUser.password);
+  if (!isPassValid) {
+    res.status(404).json({ error: "Password salah!" });
+    return;
+  }
 
-    if (result) {
-      return res.status(200).json({ mssg: "Login berhasil!" });
-    } else {
-      return res.status(404).json({ mssg: "Password tidak valid." });
-    }
-  });
+  const token = jwt.sign({ id: existingUser._id }, "secret_key");
+  res.status(200).json({ token, existingUser });
 });
 
 module.exports = router;

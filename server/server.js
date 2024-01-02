@@ -3,7 +3,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const PostController = require("./controllers/PostController");
 const UserController = require("./controllers/UserController");
-const Auth = require("./middleware/AuthMiddleware");
 const app = express();
 const port = process.env.PORT;
 
@@ -16,9 +15,6 @@ app.use((req, res, next) => {
 
 app.use("/api/posts/:userId", PostController);
 app.use("/users", UserController);
-app.get("/", Auth, (req, res) => {
-  res.json({ message: "Home Page - Authorized Access" });
-});
 
 mongoose
   .connect(process.env.MONGO_URL)

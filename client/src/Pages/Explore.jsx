@@ -1,19 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../Layout/layout";
-import { useSecureData } from "../hooks/isLogged";
+import PostCard from "../components/PostCard";
 import { useNavigate } from "react-router-dom";
+import { useSecureData } from "../hooks/isLogged";
 
-export default function Explore({ token }) {
-  const { data, loading, error } = useSecureData(token);
+export default function Home({ token }) {
   const navigate = useNavigate();
+  const [posts, setPosts] = useState(null);
+  const { data, loading, error } = useSecureData(token);
+
   useEffect(() => {
-    if (error) {
-      navigate("/login");
-    }
-  });
+    const fetchPost = async () => {
+      if (error) {
+        navigate("/login");
+      }
+      if (!loading && !error && data) {
+        const postResponse = await fetch(`/api/posts/${data.id}`);
+        const json = await postResponse.json();
+
+        if (postResponse.ok) {
+          setPosts(json);
+        }
+      }
+    };
+    fetchPost();
+  }, [navigate, token, data, loading, error]);
+
   return (
     <Layout>
-      <h1>Explore Page</h1>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {posts && posts.map((post) => <PostCard key={post._id} />)}
+      </div>
     </Layout>
   );
 }

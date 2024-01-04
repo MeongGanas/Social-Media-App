@@ -8,12 +8,12 @@ export default function Logout({ logout, token }) {
     navigate("/");
   };
 
-  const { data, loading, error } = useSecureData(token);
+  const { error } = useSecureData(token);
   useEffect(() => {
     if (error) {
       navigate("/login");
     }
-  });
+  }, [navigate]);
 
   return (
     <div className="flex justify-center items-center min-h-screen">

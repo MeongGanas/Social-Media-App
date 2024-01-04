@@ -10,26 +10,15 @@ export default function Home({ token }) {
   const { data, loading, error } = useSecureData(token);
 
   useEffect(() => {
-    const fetchPost = async () => {
-      if (error) {
-        navigate("/login");
-      }
-      if (!loading && !error && data) {
-        const postResponse = await fetch(`/api/posts/${data.id}`);
-        const json = await postResponse.json();
-
-        if (postResponse.ok) {
-          setPosts(json);
-        }
-      }
-    };
-    fetchPost();
-  }, [navigate, token, data, loading, error]);
+    if (error) {
+      navigate("/login");
+    }
+  }, [navigate, error]);
 
   return (
     <Layout>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {posts && posts.map((post) => <PostCard key={post._id} />)}
+        <h1>Halaman Home</h1>
       </div>
     </Layout>
   );

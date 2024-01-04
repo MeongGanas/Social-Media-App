@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import swal from "sweetalert2";
+import { useSecureData } from "../hooks/isLogged";
 
-export default function Signup() {
+export default function Signup({ token }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [err, setErr] = useState(null);
 
   const navigate = useNavigate();
+  const { data, loading, error } = useSecureData(token);
+  useEffect(() => {
+    if (data && !loading && !error) {
+      navigate("/");
+    }
+  });
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -41,7 +48,7 @@ export default function Signup() {
         timer: 1000,
       })
       .then(() => {
-        navigate("/");
+        navigate("/login");
       });
   };
 

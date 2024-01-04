@@ -11,6 +11,7 @@ const userModel = new Schema(
       unique: true,
     },
     password: { type: String, required: [true, "Password is required"] },
+    profile: { type: Buffer, required: false },
   },
   { timestamps: true }
 );

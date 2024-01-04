@@ -17,8 +17,8 @@ export default function Home({ token }) {
 
   return (
     <Layout>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <h1>Halaman Home</h1>
+      <div className="p-5">
+        <h1 className="text-xl">Halaman Home</h1>
       </div>
     </Layout>
   );

@@ -26,11 +26,11 @@ router.get("/:id", async (req, res) => {
 
 // create posts
 router.post("/", async (req, res) => {
-  const { content, image } = req.body;
+  const { desc, image } = req.body;
   const { userId } = req.params;
 
   try {
-    const post = await Posts.create({ author: userId, content, image });
+    const post = await Posts.create({ author: userId, desc, image });
     res.status(200).json(post);
   } catch (err) {
     res.status(404).json({ error: err.message });

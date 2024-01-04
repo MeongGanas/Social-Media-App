@@ -4,11 +4,12 @@ const Schema = mongoose.Schema;
 
 const PostModel = new Schema(
   {
-    content: {
+    desc: {
       type: String,
       required: true,
     },
     image: {
+      data: Buffer,
       type: String,
       required: true,
     },

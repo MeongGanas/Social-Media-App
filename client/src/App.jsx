@@ -7,6 +7,7 @@ import NotFound from "./Pages/NotFound";
 import ProfilePage from "./Pages/Profile";
 import Explore from "./Pages/Explore";
 import { useState } from "react";
+import CreatePost from "./Pages/CreatePost";
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
@@ -36,6 +37,7 @@ export default function App() {
           path="/logout"
           element={<LogoutPage logout={logout} token={token} />}
         />
+        <Route exact path="/profile/create" element={<CreatePost />} />
         <Route exact path="/*" element={<NotFound />} />
       </Routes>
     </div>

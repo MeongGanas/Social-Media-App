@@ -1,34 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import swal from "sweetalert2";
+import { useSecureData } from "../hooks/isLogged";
 
 export default function Login({ token, setToken }) {
   const navigate = useNavigate();
 
+  const { data, loading, error } = useSecureData(token);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState(null);
 
   useEffect(() => {
-    if (token) {
-      const fetchData = async () => {
-        const response = await fetch("/middleware/secure-data", {
-          method: "GET",
-          headers: {
-            Authorization: token ? token : "",
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.ok) {
-          navigate("/");
-        } else {
-          const errorData = await response.json();
-          console.error("Error fetching secure data:", errorData.message);
-        }
-      };
-      fetchData();
+    if (data && !loading && !error) {
+      navigate("/");
     }
-  }, [navigate, token]);
+  }, [navigate, token, data, loading, error]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

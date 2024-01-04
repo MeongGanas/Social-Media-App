@@ -1,10 +1,20 @@
 import { useNavigate } from "react-router-dom";
+import { useSecureData } from "../hooks/isLogged";
+import { useEffect } from "react";
 
-export default function Logout({ logout }) {
+export default function Logout({ logout, token }) {
   const navigate = useNavigate();
   const back = () => {
     navigate("/");
   };
+
+  const { data, loading, error } = useSecureData(token);
+  useEffect(() => {
+    if (error) {
+      navigate("/login");
+    }
+  });
+
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="min-w-[400px]">

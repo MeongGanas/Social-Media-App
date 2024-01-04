@@ -23,15 +23,19 @@ export default function App() {
     <div>
       <Routes>
         <Route exact path="/" element={<HomePage token={token} />} />
-        <Route exact path="/explore" element={<Explore />} />
-        <Route exact path="/profile" element={<ProfilePage />} />
+        <Route exact path="/explore" element={<Explore />} token={token} />
+        <Route exact path="/profile" element={<ProfilePage />} token={token} />
         <Route
           exact
           path="/login"
           element={<SigninPage setToken={setToken} token={token} />}
         />
         <Route exact path="/signup" element={<SignupPage />} />
-        <Route exact path="/logout" element={<LogoutPage logout={logout} />} />
+        <Route
+          exact
+          path="/logout"
+          element={<LogoutPage logout={logout} token={token} />}
+        />
         <Route exact path="/*" element={<NotFound />} />
       </Routes>
     </div>

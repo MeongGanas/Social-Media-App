@@ -1,3 +1,4 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const express = require("express");
 const bcrypt = require("bcryptjs");
@@ -27,21 +28,27 @@ router.post("/create", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  const existingUser = await Users.findOne({ username });
+  try {
+    const existingUser = await Users.findOne({ username });
+    if (!existingUser) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
 
-  if (!existingUser) {
-    res.status(404).json({ error: "User not found" });
-    return;
+    const isPassValid = await bcrypt.compare(password, existingUser.password);
+    if (!isPassValid) {
+      res.status(404).json({ error: "Password salah!" });
+      return;
+    }
+
+    const token = jwt.sign({ id: existingUser._id }, process.env.SECRET_KEY, {
+      expiresIn: "1h",
+    });
+    res.status(200).json({ token, existingUser });
+  } catch (err) {
+    console.error("Login error: ", err);
+    res.status(500).json({ error: "Internal server error" });
   }
-
-  const isPassValid = await bcrypt.compare(password, existingUser.password);
-  if (!isPassValid) {
-    res.status(404).json({ error: "Password salah!" });
-    return;
-  }
-
-  const token = jwt.sign({ id: existingUser._id }, "secret_key");
-  res.status(200).json({ token, existingUser });
 });
 
 module.exports = router;

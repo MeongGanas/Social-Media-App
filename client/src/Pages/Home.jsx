@@ -7,20 +7,29 @@ export default function Home({ token }) {
   const navigate = useNavigate();
 
   const [posts, setPosts] = useState(null);
+
   useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
+    const fetchPost = async () => {
+      const secureResponse = await fetch("/middleware/secure-data", {
+        method: "GET",
+        headers: {
+          Authorization: token ? token : "",
+          "Content-Type": "application/json",
+        },
+      });
+      if (!secureResponse.ok) {
+        navigate("/login");
+      }
+      const data = await secureResponse.json();
 
-    const fetchPosts = async () => {
-      const response = await fetch("/api/posts/65925b9e4c5678d0aba26210");
-      const json = await response.json();
+      const postResponse = await fetch(`/api/posts/${data.id}`);
+      const json = await postResponse.json();
 
-      if (response.ok) {
+      if (postResponse.ok) {
         setPosts(json);
       }
     };
-    fetchPosts();
+    fetchPost();
   }, [navigate, token]);
 
   return (

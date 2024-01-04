@@ -11,9 +11,24 @@ export default function Login({ token, setToken }) {
 
   useEffect(() => {
     if (token) {
-      navigate("/");
+      const fetchData = async () => {
+        const response = await fetch("/middleware/secure-data", {
+          method: "GET",
+          headers: {
+            Authorization: token ? token : "",
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.ok) {
+          navigate("/");
+        } else {
+          const errorData = await response.json();
+          console.error("Error fetching secure data:", errorData.message);
+        }
+      };
+      fetchData();
     }
-  });
+  }, [navigate, token]);
 
   const handleLogin = async (e) => {
     e.preventDefault();

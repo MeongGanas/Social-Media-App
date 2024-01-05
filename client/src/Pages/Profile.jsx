@@ -4,10 +4,12 @@ import { useSecureData } from "../hooks/isLogged";
 import { useEffect, useState } from "react";
 import { Add } from "@mui/icons-material";
 import Loading from "../components/Loading";
+import PostCard from "../components/PostCard";
 
 export default function Profile({ token }) {
   const { data, loading, error } = useSecureData(token);
   const [user, setUser] = useState(null);
+  const [userPosts, setUserPosts] = useState(null);
   const navigate = useNavigate();
   const [loadUser, setLoadUser] = useState(true);
 
@@ -18,11 +20,13 @@ export default function Profile({ token }) {
       }
       if (data && !loading && !error) {
         const userResponse = await fetch(`users/getUser/${data.id}`);
+        const userPostResponse = await fetch(`api/posts/${data.id}`);
 
         if (userResponse.ok) {
-          const json = await userResponse.json();
-          console.log(json);
-          setUser(json);
+          const userJson = await userResponse.json();
+          const postJson = await userPostResponse.json();
+          setUser(userJson);
+          setUserPosts(postJson);
           setLoadUser(false);
           return;
         }
@@ -36,7 +40,7 @@ export default function Profile({ token }) {
       {loadUser && <Loading />}
       {!loadUser && (
         <div className="p-5">
-          <div className="profile_wrapper">
+          <div className="profile_wrapper border-b border-b-gray pb-5 mb-5">
             <h1 className="text-xl">User Profile</h1>
             <div className="mt-2 mb-5 flex items-center gap-2">
               <img src="/icon/user.jpg" width="80" alt="user_image" />
@@ -56,6 +60,9 @@ export default function Profile({ token }) {
             >
               <Add className="text-slate-500" />
             </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {userPosts && userPosts.map((post) => <PostCard key={post._id} />)}
           </div>
         </div>
       )}

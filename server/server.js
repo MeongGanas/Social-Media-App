@@ -14,7 +14,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/posts/:userId", PostController);
+app.use("/api/posts", PostController);
 app.use("/users", UserController);
 
 app.use("/middleware", MiddlewareController);

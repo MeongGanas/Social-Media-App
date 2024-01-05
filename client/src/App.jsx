@@ -37,7 +37,12 @@ export default function App() {
           path="/logout"
           element={<LogoutPage logout={logout} token={token} />}
         />
-        <Route exact path="/profile/create" element={<CreatePost />} />
+        <Route
+          exact
+          path="/profile/create"
+          element={<CreatePost />}
+          token={token}
+        />
         <Route exact path="/*" element={<NotFound />} />
       </Routes>
     </div>

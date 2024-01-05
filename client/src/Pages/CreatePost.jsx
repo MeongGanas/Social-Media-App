@@ -1,13 +1,30 @@
 import { Link } from "react-router-dom";
 import Layout from "../Layout/layout";
 import { useState } from "react";
+import { useSecureData } from "../hooks/isLogged";
 
-export default function CreatePost() {
+export default function CreatePost({ token }) {
   const [image, setImage] = useState(null);
   const [desc, setDesc] = useState(null);
+  const { data, loading, error } = useSecureData(token);
 
-  const handleCreate = async () => {
+  const handleCreate = async (e) => {
+    e.preventDefault();
+
     const post = { image, desc };
+    try {
+      if (!loading && !error && data) {
+        const response = await fetch(`api/posts/${data.id}`, {
+          method: "POST",
+          body: JSON.stringify(post),
+          headers: "",
+        });
+
+        const json = await response.json();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleUpload = (e) => {
@@ -18,7 +35,7 @@ export default function CreatePost() {
         document.getElementById("image-preview").src = render.result;
       };
       render.readAsDataURL(file);
-      setDesc(file);
+      setImage(file);
     }
   };
 
@@ -82,6 +99,7 @@ export default function CreatePost() {
             rows="4"
             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
             placeholder="Description..."
+            onChange={(e) => setDesc(e.target.value)}
           ></textarea>
           <div className="flex justify-end mt-5 gap-5">
             <Link

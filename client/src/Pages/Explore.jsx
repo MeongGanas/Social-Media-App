@@ -17,7 +17,7 @@ export default function Home({ token }) {
         navigate("/login");
       }
       if (!loading && !error && data) {
-        const postResponse = await fetch(`/api/posts/${data.id}`);
+        const postResponse = await fetch(`/api/posts`);
         const json = await postResponse.json();
 
         if (postResponse.ok) {

@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const Posts = require("../model/PostModel");
+const multer = require("multer");
+const uuidv4 = require("uuid").v4;
 
 const router = express.Router({ mergeParams: true });
 
@@ -12,7 +14,7 @@ router.get("/", async (req, res) => {
 });
 
 // single posts
-router.get("/:id", async (req, res) => {
+router.get("/post/:id", async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.isValidObjectId(id)) {
@@ -25,12 +27,26 @@ router.get("/:id", async (req, res) => {
 });
 
 // create posts
-router.post("/", async (req, res) => {
-  const { desc, image } = req.body;
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${uuidv4()}-${file.originalname}`);
+  },
+});
+const upload = multer({ storage: storage });
+
+router.post("/:userId/create", upload.single("image"), async (req, res) => {
+  const { desc } = req.body;
   const { userId } = req.params;
 
   try {
-    const post = await Posts.create({ author: userId, desc, image });
+    const post = await Posts.create({
+      author: userId,
+      desc,
+      image: req.file.filename,
+    });
     res.status(200).json(post);
   } catch (err) {
     res.status(404).json({ error: err.message });
@@ -38,7 +54,7 @@ router.post("/", async (req, res) => {
 });
 
 // delete posts
-router.delete("/:id", async (req, res) => {
+router.delete("/:userId/:id", async (req, res) => {
   const { id, userId } = req.params;
 
   if (!mongoose.isValidObjectId(id) || !mongoose.isValidObjectId(userId)) {
@@ -55,7 +71,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 // update posts
-router.patch("/:id", async (req, res) => {
+router.patch("/:userId/:id", async (req, res) => {
   const { id, userId } = req.params;
 
   if (!mongoose.isValidObjectId(id) || !mongoose.isValidObjectId(userId)) {
@@ -72,6 +88,18 @@ router.patch("/:id", async (req, res) => {
   }
 
   res.status(200).json(post);
+});
+
+router.get("/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  const posts = await Posts.find({ author: userId });
+
+  if (!posts) {
+    return res.status(404).json({ mssg: "Posts not found" });
+  }
+
+  res.status(200).json(posts);
 });
 
 module.exports = router;

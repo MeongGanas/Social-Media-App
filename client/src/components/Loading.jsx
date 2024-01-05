@@ -6,7 +6,7 @@ export default function Loading() {
     >
       <svg
         aria-hidden="true"
-        class="w-8 h-8 text-gray-200 animate-spin fill-slate-600"
+        className="w-8 h-8 text-gray-200 animate-spin fill-slate-600"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -20,7 +20,7 @@ export default function Loading() {
           fill="currentFill"
         />
       </svg>
-      <span class="sr-only">Loading...</span>
+      <span className="sr-only">Loading...</span>
     </div>
   );
 }

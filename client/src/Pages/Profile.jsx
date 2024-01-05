@@ -61,9 +61,7 @@ export default function Profile({ token }) {
               <Add className="text-slate-500" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {userPosts && userPosts.map((post) => <PostCard key={post._id} />)}
-          </div>
+          <PostCard posts={userPosts} />
         </div>
       )}
     </Layout>

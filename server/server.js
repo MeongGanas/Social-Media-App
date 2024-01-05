@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const PostController = require("./controllers/PostController");
 const UserController = require("./controllers/UserController");
 const MiddlewareController = require("./controllers/MiddlewareController");
+const path = require("path");
 const app = express();
 const port = process.env.PORT;
 
@@ -18,6 +19,16 @@ app.use("/api/posts", PostController);
 app.use("/users", UserController);
 
 app.use("/middleware", MiddlewareController);
+
+app.get("/image/:name", (req, res) => {
+  try {
+    const { name } = req.params;
+    const imagePath = path.join(__dirname, "/uploads", name);
+    res.sendFile(imagePath);
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 mongoose
   .connect(process.env.MONGO_URL)

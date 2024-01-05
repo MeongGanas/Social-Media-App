@@ -32,11 +32,7 @@ export default function Home({ token }) {
   return (
     <Layout>
       {loadPosts && <Loading />}
-      {!loadPosts && (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-5">
-          {posts && posts.map((post) => <PostCard key={post._id} />)}
-        </div>
-      )}
+      {!loadPosts && <PostCard posts={posts} />}
     </Layout>
   );
 }

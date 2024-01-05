@@ -1,26 +1,47 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "../Layout/layout";
 import { useState } from "react";
 import { useSecureData } from "../hooks/isLogged";
+import swal from "sweetalert2";
 
 export default function CreatePost({ token }) {
   const [image, setImage] = useState(null);
   const [desc, setDesc] = useState(null);
   const { data, loading, error } = useSecureData(token);
+  const navigate = useNavigate();
 
   const handleCreate = async (e) => {
     e.preventDefault();
 
-    const post = { image, desc };
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("desc", desc);
+
     try {
       if (!loading && !error && data) {
-        const response = await fetch(`api/posts/${data.id}`, {
+        const response = await fetch(`/api/posts/${data.id}/create`, {
           method: "POST",
-          body: JSON.stringify(post),
-          headers: "",
+          body: formData,
         });
 
         const json = await response.json();
+
+        if (!response.ok) {
+          console.log(json.error);
+          return false;
+        }
+
+        swal
+          .fire({
+            title: "Success!",
+            text: "Post created successfuly!",
+            icon: "success",
+            confirmButtonText: "Close",
+            timer: 1000,
+          })
+          .then(() => {
+            navigate("/profile");
+          });
       }
     } catch (err) {
       console.log(err);

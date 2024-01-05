@@ -40,8 +40,7 @@ export default function App() {
         <Route
           exact
           path="/profile/create"
-          element={<CreatePost />}
-          token={token}
+          element={<CreatePost token={token} />}
         />
         <Route exact path="/*" element={<NotFound />} />
       </Routes>

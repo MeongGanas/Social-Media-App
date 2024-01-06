@@ -5,6 +5,7 @@ import { useSecureData } from "../hooks/isLogged";
 import swal from "sweetalert2";
 
 export default function CreatePost({ token }) {
+  const [title, setTitle] = useState(null);
   const [image, setImage] = useState(null);
   const [desc, setDesc] = useState(null);
   const { data, loading, error } = useSecureData(token);
@@ -16,6 +17,7 @@ export default function CreatePost({ token }) {
     const formData = new FormData();
     formData.append("image", image);
     formData.append("desc", desc);
+    formData.append("title", title);
 
     try {
       if (!loading && !error && data) {
@@ -109,19 +111,36 @@ export default function CreatePost({ token }) {
               />
             </label>
           </div>
-          <label
-            htmlFor="message"
-            className="block mb-2 text-sm font-medium text-gray-900"
-          >
-            Description
-          </label>
-          <textarea
-            id="message"
-            rows="4"
-            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
-            placeholder="Description..."
-            onChange={(e) => setDesc(e.target.value)}
-          ></textarea>
+          <div className="mb-5">
+            <label
+              htmlFor="title"
+              className="block mb-2 text-sm font-medium text-gray-900"
+            >
+              Title
+            </label>
+            <input
+              id="title"
+              type="text"
+              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
+              placeholder="Title..."
+              onChange={(e) => setTitle(e.target.value)}
+            ></input>
+          </div>
+          <div>
+            <label
+              htmlFor="message"
+              className="block mb-2 text-sm font-medium text-gray-900"
+            >
+              Description
+            </label>
+            <textarea
+              id="message"
+              rows="4"
+              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
+              placeholder="Description..."
+              onChange={(e) => setDesc(e.target.value)}
+            ></textarea>
+          </div>
           <div className="flex justify-end mt-5 gap-5">
             <Link
               type="button"

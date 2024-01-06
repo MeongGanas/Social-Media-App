@@ -4,6 +4,10 @@ const Schema = mongoose.Schema;
 
 const PostModel = new Schema(
   {
+    title: {
+      type: String,
+      required: true,
+    },
     desc: {
       type: String,
       required: true,

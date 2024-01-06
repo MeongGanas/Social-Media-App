@@ -39,12 +39,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post("/:userId/create", upload.single("image"), async (req, res) => {
-  const { desc } = req.body;
+  const { desc, title } = req.body;
   const { userId } = req.params;
   const user = await Users.findById(userId);
 
   try {
     const post = await Posts.create({
+      title,
       author: user.username,
       author_id: userId,
       desc,

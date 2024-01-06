@@ -13,7 +13,12 @@ const PostModel = new Schema(
       type: String,
       required: true,
     },
-    author: { type: Schema.Types.ObjectId, ref: "User" },
+    author: { type: String, ref: "User" },
+    author_id: { type: Schema.Types.ObjectId, ref: "User" },
+    likes: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );

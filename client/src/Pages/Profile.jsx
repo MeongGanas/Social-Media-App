@@ -4,7 +4,7 @@ import { useSecureData } from "../hooks/isLogged";
 import { useEffect, useState } from "react";
 import { Add } from "@mui/icons-material";
 import Loading from "../components/Loading";
-import PostCard from "../components/PostCard";
+import PostCards from "../components/PostCards";
 
 export default function Profile({ token }) {
   const { data, loading, error } = useSecureData(token);
@@ -25,6 +25,7 @@ export default function Profile({ token }) {
         if (userResponse.ok) {
           const userJson = await userResponse.json();
           const postJson = await userPostResponse.json();
+          console.log(postJson);
           setUser(userJson);
           setUserPosts(postJson);
           setLoadUser(false);
@@ -33,7 +34,7 @@ export default function Profile({ token }) {
       }
     };
     fetchUser();
-  }, [navigate, data]);
+  }, [navigate, data, error, loading]);
 
   return (
     <Layout>
@@ -61,7 +62,7 @@ export default function Profile({ token }) {
               <Add className="text-slate-500" />
             </Link>
           </div>
-          <PostCard posts={userPosts} />
+          <PostCards posts={userPosts} />
         </div>
       )}
     </Layout>

@@ -97,7 +97,7 @@ export default function CreatePost({ token }) {
                   SVG, PNG, JPG or GIF (MAX. 800x400px)
                 </p>
                 <h1 className="mt-4">Preview: </h1>
-                <img id="image-preview" className="mt-2 max-w-full" />
+                <img id="image-preview" className="mt-2 max-w-full" alt="" />
               </div>
               <input
                 id="dropzone-file"

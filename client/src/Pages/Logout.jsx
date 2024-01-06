@@ -13,7 +13,7 @@ export default function Logout({ logout, token }) {
     if (error) {
       navigate("/login");
     }
-  }, [navigate]);
+  }, [navigate, error]);
 
   return (
     <div className="flex justify-center items-center min-h-screen">

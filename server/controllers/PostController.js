@@ -3,6 +3,7 @@ const express = require("express");
 const Posts = require("../model/PostModel");
 const multer = require("multer");
 const uuidv4 = require("uuid").v4;
+const Users = require("../model/UserModel");
 
 const router = express.Router({ mergeParams: true });
 
@@ -40,12 +41,15 @@ const upload = multer({ storage: storage });
 router.post("/:userId/create", upload.single("image"), async (req, res) => {
   const { desc } = req.body;
   const { userId } = req.params;
+  const user = await Users.findById(userId);
 
   try {
     const post = await Posts.create({
-      author: userId,
+      author: user.username,
+      author_id: userId,
       desc,
       image: req.file.filename,
+      likes: 0,
     });
     res.status(200).json(post);
   } catch (err) {
@@ -94,7 +98,7 @@ router.patch("/:userId/:id", async (req, res) => {
 router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
 
-  const posts = await Posts.find({ author: userId });
+  const posts = await Posts.find({ author_id: userId });
 
   if (!posts) {
     return res.status(404).json({ mssg: "Posts not found" });

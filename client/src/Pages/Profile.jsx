@@ -25,7 +25,6 @@ export default function Profile({ token }) {
         if (userResponse.ok) {
           const userJson = await userResponse.json();
           const postJson = await userPostResponse.json();
-          console.log(postJson);
           setUser(userJson);
           setUserPosts(postJson);
           setLoadUser(false);

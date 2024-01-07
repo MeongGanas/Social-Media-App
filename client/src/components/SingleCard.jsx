@@ -5,40 +5,43 @@ import {
   Share,
 } from "@mui/icons-material";
 import { ButtonGroup, Checkbox, IconButton } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { LikeContext } from "../context/likeContext";
 
 export default function SingleCard({ post, userId }) {
-  const [likes, setLikes] = useState(post.likes);
+  const { likes, setLikes } = useContext(LikeContext);
   const [readMore, setReadMore] = useState(false);
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
+    setLikes(post.likes);
     setChecked(post.likedBy.includes(userId));
-  });
+  }, [post]);
 
   const like = async (postId) => {
-    if (!checked) {
-      const likeResponse = await fetch(`/api/posts/${userId}/like/${postId}`);
-      const json = await likeResponse.json();
+    const likeResponse = await fetch(`/api/posts/${userId}/like/${postId}`);
+    const json = await likeResponse.json();
 
-      if (!likeResponse) {
-        console.log(json.error);
-        return false;
-      }
-      setChecked(false);
-    } else {
-      const unlikeResponse = await fetch(
-        `/api/posts/${userId}/unlike/${postId}`
-      );
-      const json = await unlikeResponse.json();
-
-      if (!unlikeResponse) {
-        console.log(json.error);
-        return false;
-      }
-
-      setChecked(false);
+    if (!likeResponse) {
+      console.log(json.error);
+      return false;
     }
+
+    setChecked(true);
+    setLikes(likes + 1);
+  };
+
+  const unlike = async (postId) => {
+    const unlikeResponse = await fetch(`/api/posts/${userId}/unlike/${postId}`);
+    const json = await unlikeResponse.json();
+
+    if (!unlikeResponse) {
+      console.log(json.error);
+      return false;
+    }
+
+    setChecked(false);
+    setLikes(likes - 1);
   };
 
   return (
@@ -70,7 +73,11 @@ export default function SingleCard({ post, userId }) {
             checkedIcon={<Favorite className="text-red-600" />}
             checked={checked}
             onChange={() => {
-              like(post._id);
+              if (!checked) {
+                like(post._id);
+              } else {
+                unlike(post._id);
+              }
             }}
           />
           <IconButton aria-label="comment">

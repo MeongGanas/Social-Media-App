@@ -5,11 +5,30 @@ import {
   Share,
 } from "@mui/icons-material";
 import { ButtonGroup, Checkbox, IconButton } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function SingleCard({ post }) {
-  const [likes, setLikes] = useState(0);
+export default function SingleCard({ post, userId }) {
+  const [likes, setLikes] = useState(post.likes);
   const [readMore, setReadMore] = useState(false);
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    if (post.likedBy.includes(userId)) {
+      setChecked(true);
+    }
+  });
+
+  const like = async (postId) => {
+    const likeResponse = await fetch(`/api/posts/${userId}/liked/${postId}`);
+    const json = await likeResponse.json();
+
+    if (!likeResponse) {
+      console.log(json.error);
+      return false;
+    }
+
+    setChecked(true);
+  };
 
   return (
     <div className="max-w-sm w-[384px] bg-white border mb-5 border-gray-200 rounded-lg shadow">
@@ -38,6 +57,10 @@ export default function SingleCard({ post }) {
           <Checkbox
             icon={<FavoriteBorder />}
             checkedIcon={<Favorite className="text-red-600" />}
+            checked={checked}
+            onChange={() => {
+              like(post._id);
+            }}
           />
           <IconButton aria-label="comment">
             <ChatBubbleOutline />
@@ -49,7 +72,9 @@ export default function SingleCard({ post }) {
         <p className="mb-1 px-3 font-normal text-gray-700">{likes} Likes</p>
         <p className="mb-1 px-3 font-normal text-gray-700">
           {post.title}
-          <span className={`${readMore ? "block" : "hidden"}`}>
+          <span
+            className={`${readMore ? "block" : "hidden"} text-gray-600 my-2`}
+          >
             {post.desc}
           </span>
         </p>

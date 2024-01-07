@@ -23,6 +23,7 @@ const PostModel = new Schema(
       type: Number,
       required: true,
     },
+    likedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );

@@ -108,4 +108,22 @@ router.get("/:userId", async (req, res) => {
   res.status(200).json(posts);
 });
 
+router.get("/:userId/liked/:postId", async (req, res) => {
+  const { userId, postId } = req.params;
+  try {
+    const like = await Posts.findByIdAndUpdate(postId, {
+      $inc: { likes: 1 },
+      $addToSet: { likedBy: userId },
+    });
+
+    if (!like) {
+      res.status(401).json({ error: "error" });
+    }
+
+    res.status(200).json(like);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

@@ -17,6 +17,7 @@ export default function Home({ token }) {
         navigate("/login");
       }
       if (!loading && !error && data) {
+        console.log(data);
         const postResponse = await fetch(`/api/posts`);
         const json = await postResponse.json();
 
@@ -38,7 +39,9 @@ export default function Home({ token }) {
           <div className="flex justify-center">
             <div>
               {posts &&
-                posts.map((post) => <SingleCard post={post} key={post._id} />)}
+                posts.map((post) => (
+                  <SingleCard post={post} key={post._id} userId={data.id} />
+                ))}
             </div>
           </div>
         </div>

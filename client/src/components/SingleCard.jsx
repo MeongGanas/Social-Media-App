@@ -11,14 +11,17 @@ import { LikeContext } from "../context/likeContext";
 export default function SingleCard({ post, userId }) {
   const { likes, setLikes } = useContext(LikeContext);
   const [readMore, setReadMore] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [checked, setChecked] = useState(post.likedBy.includes(userId));
 
   useEffect(() => {
     setLikes(post.likes);
-    setChecked(post.likedBy.includes(userId));
-  }, [post]);
+  }, [post, setLikes]);
 
   const like = async (postId) => {
+    if (isLoading) return;
+    setIsLoading(true);
+
     const likeResponse = await fetch(`/api/posts/${userId}/like/${postId}`);
     const json = await likeResponse.json();
 
@@ -29,9 +32,13 @@ export default function SingleCard({ post, userId }) {
 
     setChecked(true);
     setLikes(likes + 1);
+    setIsLoading(false);
   };
 
   const unlike = async (postId) => {
+    if (isLoading) return;
+    setIsLoading(true);
+
     const unlikeResponse = await fetch(`/api/posts/${userId}/unlike/${postId}`);
     const json = await unlikeResponse.json();
 
@@ -42,6 +49,7 @@ export default function SingleCard({ post, userId }) {
 
     setChecked(false);
     setLikes(likes - 1);
+    setIsLoading(false);
   };
 
   return (
@@ -73,9 +81,9 @@ export default function SingleCard({ post, userId }) {
             checkedIcon={<Favorite className="text-red-600" />}
             checked={checked}
             onChange={() => {
-              if (!checked) {
+              if (!checked && !isLoading) {
                 like(post._id);
-              } else {
+              } else if (checked && !isLoading) {
                 unlike(post._id);
               }
             }}

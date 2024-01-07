@@ -33,7 +33,7 @@ export default function Home({ token }) {
   return (
     <Layout>
       {loadPosts && <Loading />}
-      {!loading && (
+      {!loadPosts && (
         <div className="p-5">
           <h1 className="text-2xl font-semibold">Home</h1>
           <div className="flex justify-center">

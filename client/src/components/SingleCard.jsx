@@ -13,21 +13,32 @@ export default function SingleCard({ post, userId }) {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (post.likedBy.includes(userId)) {
-      setChecked(true);
-    }
+    setChecked(post.likedBy.includes(userId));
   });
 
   const like = async (postId) => {
-    const likeResponse = await fetch(`/api/posts/${userId}/liked/${postId}`);
-    const json = await likeResponse.json();
+    if (!checked) {
+      const likeResponse = await fetch(`/api/posts/${userId}/like/${postId}`);
+      const json = await likeResponse.json();
 
-    if (!likeResponse) {
-      console.log(json.error);
-      return false;
+      if (!likeResponse) {
+        console.log(json.error);
+        return false;
+      }
+      setChecked(false);
+    } else {
+      const unlikeResponse = await fetch(
+        `/api/posts/${userId}/unlike/${postId}`
+      );
+      const json = await unlikeResponse.json();
+
+      if (!unlikeResponse) {
+        console.log(json.error);
+        return false;
+      }
+
+      setChecked(false);
     }
-
-    setChecked(true);
   };
 
   return (

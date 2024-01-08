@@ -1,4 +1,5 @@
 import {
+  ArrowBack,
   ChatBubbleOutline,
   Favorite,
   FavoriteBorder,
@@ -7,11 +8,14 @@ import {
 import { ButtonGroup, Checkbox, IconButton } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { LikeContext } from "../context/likeContext";
+import LikedBy from "./LikedBy";
 
 export default function SingleCard({ post, userId }) {
   const { likes, setLikes } = useContext(LikeContext);
   const [readMore, setReadMore] = useState(false);
+  const [showLikes, setShowLikes] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [usersLike, setUsersLike] = useState([]);
   const [checked, setChecked] = useState(post.likedBy.includes(userId));
 
   useEffect(() => {
@@ -52,8 +56,20 @@ export default function SingleCard({ post, userId }) {
     setIsLoading(false);
   };
 
+  const findUserData = async (userIds) => {
+    const usernames = [];
+    for (const id of userIds) {
+      const userData = await fetch(`/users/getUser/${id}`);
+      const json = await userData.json();
+      if (userData.ok) {
+        usernames.push(json);
+      }
+    }
+    setUsersLike(usernames);
+  };
+
   return (
-    <div className="max-w-sm w-[384px] bg-white border mb-5 border-gray-200 rounded-lg shadow">
+    <div className="max-w-sm w-[384px] bg-white border mb-5 relative border-gray-200 rounded-lg shadow">
       <div className="flex items-center gap-2 p-2">
         <img src="/icon/user.jpg" width="50" alt="user_image" />
         <div className="flex gap-5 items-center">
@@ -95,7 +111,36 @@ export default function SingleCard({ post, userId }) {
             <Share />
           </IconButton>
         </ButtonGroup>
-        <p className="mb-1 px-3 font-normal text-gray-700">{likes} Likes</p>
+        <div className="likes">
+          <p
+            className="mb-1 px-3 font-normal text-gray-700"
+            onClick={() => {
+              setShowLikes(true);
+              findUserData(post.likedBy);
+            }}
+          >
+            {likes} <span className="cursor-pointer">Likes</span>
+          </p>
+          <div
+            data-popover
+            id="popover-default"
+            role="tooltip"
+            className={`absolute z-10 top-0 right-0 inline-block w-full h-full text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm ${
+              showLikes ? "opacity-100 visible" : "opacity-0 invisible"
+            }`}
+          >
+            <div className="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg flex items-center">
+              <IconButton onClick={() => setShowLikes(false)}>
+                <ArrowBack />
+              </IconButton>
+              <h3 className="font-semibold text-gray-900">Liked by</h3>
+            </div>
+            <div className="px-3 py-2">
+              <LikedBy users={usersLike} />
+            </div>
+            <div data-popper-arrow></div>
+          </div>
+        </div>
         <p className="mb-1 px-3 font-normal text-gray-700">
           {post.title}
           <span

@@ -36,12 +36,12 @@ export default function Home({ token }) {
       {!loadPosts && (
         <div className="p-5">
           <h1 className="text-2xl font-semibold">Home</h1>
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-5">
             <div>
               {posts &&
                 posts.map((post) => (
-                  <LikeProvider>
-                    <SingleCard post={post} key={post._id} userId={data.id} />
+                  <LikeProvider key={post._id}>
+                    <SingleCard post={post} userId={data.id} />
                   </LikeProvider>
                 ))}
             </div>

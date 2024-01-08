@@ -12,6 +12,8 @@ const userModel = new Schema(
     },
     password: { type: String, required: [true, "Password is required"] },
     profile: { type: Buffer, required: false },
+    follower: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    following: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );

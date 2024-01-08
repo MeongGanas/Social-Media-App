@@ -43,7 +43,11 @@ export default function Profile({ token }) {
           <div className="profile_wrapper border-b border-b-gray pb-5 mb-5">
             <h1 className="text-xl">User Profile</h1>
             <div className="mt-2 mb-5 flex items-center gap-2">
-              <img src="/icon/user.jpg" width="80" alt="user_image" />
+              <img
+                src={user.profile ? user.profile : "/icon/user.jpg"}
+                width="80"
+                alt="user_image"
+              />
               <div className="flex gap-5 items-center">
                 {user && <h1 className="text-lg">{user.username}</h1>}
                 <button

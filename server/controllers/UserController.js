@@ -18,7 +18,13 @@ router.post("/create", async (req, res) => {
   }
 
   try {
-    const user = await Users.create({ username, password });
+    const user = await Users.create({
+      username,
+      password,
+      profile: null,
+      follower: [],
+      following: [],
+    });
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: error.toString() });

@@ -1,9 +1,6 @@
 export default function Loading() {
   return (
-    <div
-      role="status"
-      className="flex justify-center items-center w-full min-h-screen"
-    >
+    <div role="status">
       <svg
         aria-hidden="true"
         className="w-8 h-8 text-gray-200 animate-spin fill-slate-600"

@@ -31,7 +31,11 @@ export default function Home({ token }) {
 
   return (
     <Layout>
-      {loadPosts && <Loading />}
+      {loadPosts && (
+        <div className="flex justify-center items-center w-full min-h-screen">
+          <Loading />
+        </div>
+      )}
       {!loadPosts && (
         <div className="flex justify-center flex-col">
           <form className="p-4">

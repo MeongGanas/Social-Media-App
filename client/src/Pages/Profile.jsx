@@ -37,7 +37,11 @@ export default function Profile({ token }) {
 
   return (
     <Layout>
-      {loadUser && <Loading />}
+      {loadUser && (
+        <div className="flex justify-center items-center w-full min-h-screen">
+          <Loading />
+        </div>
+      )}
       {!loadUser && (
         <div className="p-5">
           <div className="profile_wrapper border-b border-b-gray pb-5 mb-5">

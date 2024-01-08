@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import swal from "sweetalert2";
 import { useSecureData } from "../hooks/isLogged";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 export default function Signup({ token }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState(null);
 
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ export default function Signup({ token }) {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     if (confirm !== password) {
       setErr("Password confirmation salah!");
       return false;
@@ -38,6 +41,8 @@ export default function Signup({ token }) {
       setErr(json.error);
       return false;
     }
+
+    setIsLoading(false);
 
     swal
       .fire({
@@ -127,14 +132,15 @@ export default function Signup({ token }) {
             </div>
           </div>
 
-          <div>
-            <button
+          <div className="flex w-full justify-center rounded-md bg-indigo-600 py-0.5 text-sm font-semibold leading-6 shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer">
+            <LoadingButton
               type="submit"
+              loading={isLoading}
               onClick={handleSignup}
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              sx={{ color: "white", textTransform: "none" }}
             >
               Sign up
-            </button>
+            </LoadingButton>
           </div>
         </form>
 

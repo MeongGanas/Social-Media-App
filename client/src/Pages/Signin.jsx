@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import swal from "sweetalert2";
 import { useSecureData } from "../hooks/isLogged";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 export default function Login({ token, setToken }) {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ export default function Login({ token, setToken }) {
   const { data, loading, error } = useSecureData(token);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState(null);
 
   useEffect(() => {
@@ -19,6 +21,7 @@ export default function Login({ token, setToken }) {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!token) {
       const logindata = { username, password };
@@ -39,6 +42,7 @@ export default function Login({ token, setToken }) {
 
       setToken(json.token);
       localStorage.setItem("token", json.token);
+      setIsLoading(false);
 
       swal
         .fire({
@@ -117,14 +121,15 @@ export default function Login({ token, setToken }) {
             </div>
           </div>
 
-          <div>
-            <button
+          <div className="flex w-full justify-center rounded-md bg-indigo-600 py-0.5 text-sm font-semibold leading-6 shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer">
+            <LoadingButton
               type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              loading={isLoading}
               onClick={handleLogin}
+              sx={{ color: "white", textTransform: "none" }}
             >
               Sign in
-            </button>
+            </LoadingButton>
           </div>
         </form>
 

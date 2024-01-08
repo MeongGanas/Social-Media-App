@@ -9,6 +9,7 @@ import { ButtonGroup, Checkbox, IconButton } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { LikeContext } from "../context/likeContext";
 import LikedBy from "./LikedBy";
+import Loading from "./Loading";
 
 export default function SingleCard({ post, userId }) {
   const { likes, setLikes } = useContext(LikeContext);
@@ -16,6 +17,7 @@ export default function SingleCard({ post, userId }) {
   const [showLikes, setShowLikes] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [usersLike, setUsersLike] = useState([]);
+  const [loadUser, setLoadUser] = useState(true);
   const [checked, setChecked] = useState(post.likedBy.includes(userId));
 
   useEffect(() => {
@@ -26,46 +28,56 @@ export default function SingleCard({ post, userId }) {
     if (isLoading) return;
     setIsLoading(true);
 
-    const likeResponse = await fetch(`/api/posts/${userId}/like/${postId}`);
-    const json = await likeResponse.json();
+    try {
+      const likeResponse = await fetch(`/api/posts/${userId}/like/${postId}`);
+      const json = await likeResponse.json();
 
-    if (!likeResponse) {
-      console.log(json.error);
-      return false;
+      if (!likeResponse) {
+        console.log(json.error);
+        return false;
+      }
+
+      setChecked(true);
+      setLikes((prevLikes) => prevLikes + 1);
+    } finally {
+      setIsLoading(false);
     }
-
-    setChecked(true);
-    setLikes(likes + 1);
-    setIsLoading(false);
   };
 
   const unlike = async (postId) => {
     if (isLoading) return;
     setIsLoading(true);
 
-    const unlikeResponse = await fetch(`/api/posts/${userId}/unlike/${postId}`);
-    const json = await unlikeResponse.json();
+    try {
+      const unlikeResponse = await fetch(
+        `/api/posts/${userId}/unlike/${postId}`
+      );
+      const json = await unlikeResponse.json();
 
-    if (!unlikeResponse) {
-      console.log(json.error);
-      return false;
+      if (!unlikeResponse) {
+        console.log(json.error);
+        return false;
+      }
+
+      setChecked(false);
+      setLikes((prevLikes) => prevLikes - 1);
+    } finally {
+      setIsLoading(false);
     }
-
-    setChecked(false);
-    setLikes(likes - 1);
-    setIsLoading(false);
   };
 
   const findUserData = async (userIds) => {
-    const usernames = [];
+    setLoadUser(true);
+    const userData = [];
     for (const id of userIds) {
-      const userData = await fetch(`/users/getUser/${id}`);
-      const json = await userData.json();
-      if (userData.ok) {
-        usernames.push(json);
+      const response = await fetch(`/users/getUser/${id}`);
+      const json = await response.json();
+      if (response.ok) {
+        userData.push(json);
       }
     }
-    setUsersLike(usernames);
+    setUsersLike(userData);
+    setLoadUser(false);
   };
 
   return (
@@ -129,20 +141,25 @@ export default function SingleCard({ post, userId }) {
               showLikes ? "opacity-100 visible" : "opacity-0 invisible"
             }`}
           >
-            <div className="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg flex items-center">
+            <div className="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg flex items-center gap-3">
               <IconButton onClick={() => setShowLikes(false)}>
                 <ArrowBack />
               </IconButton>
               <h3 className="font-semibold text-gray-900">Liked by</h3>
             </div>
-            <div className="px-3 py-2">
-              <LikedBy users={usersLike} />
-              {usersLike.length < 1 ? (
+            <div className="px-3 py-2 h-full">
+              {loadUser && (
+                <div className="flex justify-center items-center w-full h-full">
+                  <Loading />
+                </div>
+              )}
+              {usersLike.length === 0 && !loadUser && (
                 <h1 className="text-slate-400 text-center text-lg">
-                  No user liked this post
+                  No user like this post
                 </h1>
-              ) : (
-                ""
+              )}
+              {usersLike.length > 0 && !loadUser && (
+                <LikedBy users={usersLike} />
               )}
             </div>
             <div data-popper-arrow></div>

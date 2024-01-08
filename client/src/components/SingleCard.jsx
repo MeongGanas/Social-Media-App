@@ -137,6 +137,13 @@ export default function SingleCard({ post, userId }) {
             </div>
             <div className="px-3 py-2">
               <LikedBy users={usersLike} />
+              {usersLike.length < 1 ? (
+                <h1 className="text-slate-400 text-center text-lg">
+                  No user liked this post
+                </h1>
+              ) : (
+                ""
+              )}
             </div>
             <div data-popper-arrow></div>
           </div>

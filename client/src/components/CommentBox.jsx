@@ -50,19 +50,19 @@ export default function CommentBox({
         </IconButton>
         <h3 className="font-semibold text-gray-900">Comments</h3>
       </div>
-      <div className="px-3 py-2 h-full">
+      <div className="h-full">
         {!comments && <h1>No User Comment this post</h1>}
-        <ul>
+        <ul className="overflow-y-auto h-3/4 px-3 py-2">
           {comments &&
-            comments.map((c) => (
+            comments.map((c, i) => (
               <li
-                key={c._id}
+                key={i}
                 className="flex items-center justify-between px-2 mb-1"
               >
                 <div className="flex items-center gap-2">
                   <img src={"/icon/user.jpg"} width="50" alt="user_image" />
                   <div>
-                    <h4>{c.userId}</h4>
+                    <h4 className="text-sm">{c.userId}</h4>
                     <h2>{c.comment}</h2>
                   </div>
                 </div>

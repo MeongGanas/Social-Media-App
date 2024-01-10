@@ -149,4 +149,17 @@ router.get("/:userId/unlike/:postId", async (req, res) => {
   }
 });
 
+router.post("/comment/:postId", async (req, res) => {
+  const { postId } = req.params;
+  const data = req.body;
+
+  const post = await Posts.findByIdAndUpdate(postId, {
+    $addToSet: { comments: data },
+  });
+
+  if (post) {
+    res.status(200).json(post);
+  }
+});
+
 module.exports = router;

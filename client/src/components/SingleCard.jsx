@@ -107,8 +107,11 @@ export default function SingleCard({ post, userId }) {
               <ChatBubbleOutline />
             </IconButton>
             <CommentBox
+              postComments={post.comments}
               showComment={showComment}
               setShowComment={setShowComment}
+              postId={post._id}
+              userId={userId}
             />
           </div>
           <IconButton aria-label="share">

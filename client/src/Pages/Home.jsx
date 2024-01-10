@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useSecureData } from "../hooks/isLogged";
 import Loading from "../components/Loading";
 import { LikeProvider } from "../context/likeContext";
+import { CommentProvider } from "../context/commentContext";
 
 export default function Home({ token }) {
   const navigate = useNavigate();
@@ -44,7 +45,9 @@ export default function Home({ token }) {
               {posts &&
                 posts.map((post) => (
                   <LikeProvider key={post._id}>
-                    <SingleCard post={post} userId={data.id} />
+                    <CommentProvider key={post._id}>
+                      <SingleCard post={post} userId={data.id} />
+                    </CommentProvider>
                   </LikeProvider>
                 ))}
             </div>

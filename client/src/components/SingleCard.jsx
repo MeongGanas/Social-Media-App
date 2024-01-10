@@ -1,5 +1,4 @@
 import {
-  ArrowBack,
   ChatBubbleOutline,
   Favorite,
   FavoriteBorder,
@@ -9,7 +8,7 @@ import { ButtonGroup, Checkbox, IconButton } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { LikeContext } from "../context/likeContext";
 import LikedBy from "./LikedBy";
-import Loading from "./Loading";
+import CommentBox from "./CommentBox";
 
 export default function SingleCard({ post, userId }) {
   const { likes, setLikes } = useContext(LikeContext);
@@ -107,6 +106,10 @@ export default function SingleCard({ post, userId }) {
             >
               <ChatBubbleOutline />
             </IconButton>
+            <CommentBox
+              showComment={showComment}
+              setShowComment={setShowComment}
+            />
           </div>
           <IconButton aria-label="share">
             <Share />

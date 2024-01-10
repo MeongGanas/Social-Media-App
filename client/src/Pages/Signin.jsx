@@ -17,45 +17,43 @@ export default function Login({ token, setToken }) {
     if (data && !loading && !error) {
       navigate("/");
     }
-  }, [navigate, token, data, loading, error]);
+  }, [navigate, data, loading, error]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!token) {
-      const logindata = { username, password };
+    const logindata = { username, password };
 
-      const response = await fetch("/users/login", {
-        method: "POST",
-        body: JSON.stringify(logindata),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const json = await response.json();
+    const response = await fetch("/users/login", {
+      method: "POST",
+      body: JSON.stringify(logindata),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const json = await response.json();
 
-      if (!response.ok) {
-        setErr(json.error);
-        return false;
-      }
-
-      setToken(json.token);
-      localStorage.setItem("token", json.token);
-      setIsLoading(false);
-
-      swal
-        .fire({
-          title: "Success!",
-          text: "Login Success!",
-          icon: "success",
-          confirmButtonText: "Close",
-          timer: 1000,
-        })
-        .then(() => {
-          navigate("/");
-        });
+    if (!response.ok) {
+      setErr(json.error);
+      return false;
     }
+
+    setToken(json.token);
+    localStorage.setItem("token", json.token);
+    setIsLoading(false);
+
+    swal
+      .fire({
+        title: "Success!",
+        text: "Login Success!",
+        icon: "success",
+        confirmButtonText: "Close",
+        timer: 1000,
+      })
+      .then(() => {
+        navigate("/");
+      });
   };
 
   return (

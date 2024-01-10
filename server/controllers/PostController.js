@@ -51,6 +51,7 @@ router.post("/:userId/create", upload.single("image"), async (req, res) => {
       desc,
       image: req.file.filename,
       likes: 0,
+      comments: [],
     });
     res.status(200).json(post);
   } catch (err) {

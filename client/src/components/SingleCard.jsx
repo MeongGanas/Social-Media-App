@@ -14,10 +14,20 @@ export default function SingleCard({ post, userId }) {
   const { likes, setLikes } = useContext(LikeContext);
   const [readMore, setReadMore] = useState(false);
   const [showComment, setShowComment] = useState(false);
+  const [username, setUsername] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [checked, setChecked] = useState(post.likedBy.includes(userId));
 
   useEffect(() => {
+    const fetchUser = async (userId) => {
+      const response = await fetch(`/users/getUser/${userId}`);
+      const json = await response.json();
+
+      if (response.ok) {
+        setUsername(json.username);
+      }
+    };
+    fetchUser(userId);
     setLikes(post.likes);
   }, [post, setLikes]);
 
@@ -112,6 +122,7 @@ export default function SingleCard({ post, userId }) {
               setShowComment={setShowComment}
               postId={post._id}
               userId={userId}
+              username={username}
             />
           </div>
           <IconButton aria-label="share">

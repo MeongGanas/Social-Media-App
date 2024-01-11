@@ -23,7 +23,7 @@ app.use("/middleware", MiddlewareController);
 app.get("/image/:name", (req, res) => {
   try {
     const { name } = req.params;
-    const imagePath = path.join(__dirname, "/uploads", name);
+    const imagePath = path.join(__dirname, "/uploads/posts", name);
     res.sendFile(imagePath);
   } catch (err) {
     console.log(err);

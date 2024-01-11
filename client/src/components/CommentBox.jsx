@@ -9,6 +9,7 @@ export default function CommentBox({
   setShowComment,
   postId,
   userId,
+  username,
 }) {
   const [comment, setComment] = useState(null);
   const { comments, setComments } = useContext(CommentContext);
@@ -20,18 +21,21 @@ export default function CommentBox({
   const handleComment = async (e) => {
     e.preventDefault();
 
-    const newComment = { comment, userId };
+    if (comment) {
+      const newComment = { comment, userId, username };
 
-    const response = await fetch(`/api/posts/comment/${postId}`, {
-      method: "POST",
-      body: JSON.stringify(newComment),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+      const response = await fetch(`/api/posts/comment/${postId}`, {
+        method: "POST",
+        body: JSON.stringify(newComment),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (response.ok) {
-      setComments((prev) => [...prev, newComment]);
+      if (response.ok) {
+        setComments((prev) => [...prev, newComment]);
+        setComment("");
+      }
     }
   };
 
@@ -62,7 +66,7 @@ export default function CommentBox({
                 <div className="flex items-center gap-2">
                   <img src={"/icon/user.jpg"} width="50" alt="user_image" />
                   <div>
-                    <h4 className="text-sm">{c.userId}</h4>
+                    <h4 className="text-sm">{c.username}</h4>
                     <h2>{c.comment}</h2>
                   </div>
                 </div>
@@ -74,11 +78,11 @@ export default function CommentBox({
       <form className="absolute bottom-0 w-full">
         <div className="relative">
           <input
-            type="search"
-            id="default-search"
+            type="text"
             className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Comment here..."
             onChange={(e) => setComment(e.target.value)}
+            value={comment}
             required
           />
           <button

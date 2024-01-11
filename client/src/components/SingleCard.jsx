@@ -29,7 +29,7 @@ export default function SingleCard({ post, userId }) {
     };
     fetchUser(userId);
     setLikes(post.likes);
-  }, [post, setLikes]);
+  }, [post, setLikes, userId]);
 
   const like = async (postId) => {
     if (isLoading) return;

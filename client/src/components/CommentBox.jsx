@@ -16,7 +16,7 @@ export default function CommentBox({
 
   useEffect(() => {
     setComments(postComments);
-  }, [postComments]);
+  }, [postComments, setComments]);
 
   const handleComment = async (e) => {
     e.preventDefault();
@@ -82,7 +82,6 @@ export default function CommentBox({
             className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Comment here..."
             onChange={(e) => setComment(e.target.value)}
-            value={comment}
             required
           />
           <button

@@ -45,21 +45,33 @@ export default function Profile({ token }) {
       {!loadUser && (
         <div className="p-5">
           <div className="profile_wrapper border-b border-b-gray pb-5 mb-5">
-            <h1 className="text-xl">User Profile</h1>
-            <div className="mt-2 mb-5 flex items-center gap-2">
-              <img
-                src={user.profile ? user.profile : "/icon/user.jpg"}
-                width="80"
-                alt="user_image"
-              />
-              <div className="flex gap-5 items-center">
-                {user && <h1 className="text-lg">{user.username}</h1>}
-                <button
-                  type="button"
-                  className="text-slate-100 bg-gray-500 transition duration-200 hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5"
-                >
-                  Edit Profile
-                </button>
+            <h1 className="text-xl font-bold">User Profile</h1>
+            <div className="block mb-5 md:flex md:items-center md:justify-between">
+              <div className="my-2 flex items-center gap-2">
+                <img
+                  src={user.profile ? user.profile : "/icon/user.jpg"}
+                  width="80"
+                  alt="user_image"
+                />
+                <div className="flex gap-5 items-center">
+                  {user && <h1 className="text-lg">{user.username}</h1>}
+                  <button
+                    type="button"
+                    className="text-slate-100 bg-gray-500 transition duration-200 hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                  >
+                    Edit Profile
+                  </button>
+                </div>
+              </div>
+              <div className="flex gap-10">
+                <div className="text-center">
+                  <h1>Follower</h1>
+                  <h4>{user.follower.length}</h4>
+                </div>
+                <div className="text-center">
+                  <h1>Following</h1>
+                  <h4>{user.following.length}</h4>
+                </div>
               </div>
             </div>
             <Link

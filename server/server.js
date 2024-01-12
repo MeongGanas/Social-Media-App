@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const PostController = require("./controllers/PostController");
+const postRoutes = require("./routes/post");
 const UserController = require("./controllers/UserController");
 const MiddlewareController = require("./controllers/MiddlewareController");
 const path = require("path");
@@ -15,7 +15,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/posts", PostController);
+app.use("/api/posts", postRoutes);
 app.use("/users", UserController);
 
 app.use("/middleware", MiddlewareController);
